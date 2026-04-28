@@ -1,0 +1,48 @@
+@font-face {
+  font-family: 'GochiHand';
+  src: url('/font/GochiHand-Regular.eot');
+  font-weight: normal;
+  font-style: normal;
+  font-family: 'GochiHand';
+  src: url('/font/GochiHand-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.walkthrough-close-btn {
+  position: fixed;
+  top: 65px;
+  right: 25px;
+  z-index: 1000000;
+  color: white;
+  text-align: center;
+  font-family: 'GochiHand', cursive;
+  font-size: 18px;
+  pointer-events: auto;
+  transition: color 0.3s;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.walkthrough-close-btn:hover {
+  color: #7eff00;
+}
+
+.walkthrough-nav-btn {
+  color: inherit;
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+.walkthrough-nav-btn:hover {
+  color: white;
+}
