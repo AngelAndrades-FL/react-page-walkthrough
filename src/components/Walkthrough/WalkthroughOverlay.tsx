@@ -4,12 +4,14 @@ import { WalkthroughTooltip } from './WalkthroughTooltip';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const WalkthroughOverlay = () => {
-  const { steps, currentStepIndex } = useWalkthrough();
+  const { steps, currentStepIndex, next, prev, close } = useWalkthrough();
   const currentStep = steps[currentStepIndex];
   
   const [rect, setRect] = useState<DOMRect | null>(null);
 
   useEffect(() => {
+    let animationFrameId: number;
+
     const updateRect = () => {
       if (currentStep?.targetElement) {
         const el = currentStep.targetElement;
@@ -23,15 +25,39 @@ export const WalkthroughOverlay = () => {
       }
     };
 
+    const handleScrollOrResize = () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+      animationFrameId = requestAnimationFrame(updateRect);
+    };
+
     updateRect();
-    window.addEventListener('resize', updateRect);
-    window.addEventListener('scroll', updateRect);
+    window.addEventListener('resize', handleScrollOrResize, { passive: true });
+    window.addEventListener('scroll', handleScrollOrResize, { passive: true });
 
     return () => {
-      window.removeEventListener('resize', updateRect);
-      window.removeEventListener('scroll', updateRect);
+      window.removeEventListener('resize', handleScrollOrResize);
+      window.removeEventListener('scroll', handleScrollOrResize);
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
     };
   }, [currentStep]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        close();
+      } else if (e.key === 'ArrowRight') {
+        next();
+      } else if (e.key === 'ArrowLeft') {
+        prev();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [close, next, prev]);
 
   return (
     <AnimatePresence>
@@ -64,7 +90,7 @@ export const WalkthroughOverlay = () => {
           <rect
             width="100%"
             height="100%"
-            fill="rgba(0,0,0,0.6)"
+            fill="rgba(0,0,0,0.8)"
             mask="url(#hole-mask)"
           />
         </svg>

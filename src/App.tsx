@@ -44,7 +44,7 @@ function App() {
             >
               <Paper elevation={1} sx={{ bgcolor: 'info.light', p: 3, borderRadius: 2, border: 1, borderColor: 'info.main' }}>
                 <Typography variant="h5" color="info.dark" sx={{ fontWeight: 600 }}>Feature 1</Typography>
-                <Typography color="info.main" sx={{ mt: 1 }}>This is a great feature.</Typography>
+                <Typography color="info.dark" sx={{ mt: 1 }}>This is a great feature.</Typography>
               </Paper>
             </WalkthroughStep>
 
@@ -56,7 +56,7 @@ function App() {
             >
               <Paper elevation={1} sx={{ bgcolor: 'success.light', p: 3, borderRadius: 2, border: 1, borderColor: 'success.main' }}>
                 <Typography variant="h5" color="success.dark" sx={{ fontWeight: 600 }}>Feature 2</Typography>
-                <Typography color="success.main" sx={{ mt: 1 }}>Another awesome feature.</Typography>
+                <Typography color="success.dark" sx={{ mt: 1 }}>Another awesome feature.</Typography>
               </Paper>
             </WalkthroughStep>
           </Stack>

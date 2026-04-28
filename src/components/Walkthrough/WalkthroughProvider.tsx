@@ -54,7 +54,7 @@ export const WalkthroughProvider = ({ children }: { children: ReactNode }) => {
   const isFirstStep = currentStepIndex === 0;
   const isLastStep = currentStepIndex === sortedSteps.length - 1;
 
-  const contextValue = {
+  const contextValue = useMemo(() => ({
     isActive,
     currentStepIndex,
     steps: sortedSteps,
@@ -67,7 +67,20 @@ export const WalkthroughProvider = ({ children }: { children: ReactNode }) => {
     prev,
     isFirstStep,
     isLastStep,
-  };
+  }), [
+    isActive,
+    currentStepIndex,
+    sortedSteps,
+    registerStep,
+    unregisterStep,
+    setTargetElement,
+    start,
+    close,
+    next,
+    prev,
+    isFirstStep,
+    isLastStep,
+  ]);
 
   return (
     <WalkthroughContext.Provider value={contextValue}>

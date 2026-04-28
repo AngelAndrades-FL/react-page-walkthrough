@@ -1,5 +1,5 @@
 import { useWalkthrough, StepInfo } from './WalkthroughContext';
-import { motion } from 'framer-motion';
+import { motion, TargetAndTransition } from 'framer-motion';
 import { Box } from '@mui/material';
 
 interface WalkthroughTooltipProps {
@@ -12,7 +12,7 @@ export const WalkthroughTooltip = ({ step, rect }: WalkthroughTooltipProps) => {
   
   const gap = 40; 
 
-  const getPositionStyles = () => {
+  const getPositionStyles = (): TargetAndTransition => {
     switch (step.position) {
       case 'top':
         return { top: rect.top - gap, left: rect.left + rect.width / 2, x: '-50%', y: '-100%' };
@@ -47,6 +47,7 @@ export const WalkthroughTooltip = ({ step, rect }: WalkthroughTooltipProps) => {
       <button 
         onClick={close}
         className="walkthrough-close-btn"
+        aria-label="Close walkthrough"
       >
         <Box sx={{ position: 'absolute', top: '-45px', left: '36px', width: '44px', height: '40px', backgroundImage: "url('/images/close.png')", backgroundRepeat: 'no-repeat' }} />
         Click here to close
@@ -54,7 +55,7 @@ export const WalkthroughTooltip = ({ step, rect }: WalkthroughTooltipProps) => {
 
       <motion.div
         initial={false}
-        animate={getPositionStyles() as any}
+        animate={getPositionStyles()}
         transition={{ type: 'spring', bounce: 0, duration: 0.4 }}
         style={{ position: 'absolute', width: '320px', pointerEvents: 'auto', zIndex: 100000 }}
       >
@@ -63,21 +64,21 @@ export const WalkthroughTooltip = ({ step, rect }: WalkthroughTooltipProps) => {
           
           {renderArrow()}
 
-          <Box sx={{ fontFamily: "'GochiHand', cursive", color: 'white', textAlign: 'center', fontSize: '22px' }}>
+          <Box sx={{ fontFamily: "'GochiHand', cursive", color: 'white', textAlign: 'center', fontSize: '22px' }} aria-live="polite">
             {step.title && <Box sx={{ fontSize: '40px', mb: 1 }}>{step.title}</Box>}
             {step.content}
           </Box>
 
           <Box sx={{ backgroundImage: "url('/images/scratch-border.png')", backgroundRepeat: 'no-repeat', backgroundPosition: 'left top', width: '358px', height: '42px', mt: 2, ml: '-19px', clear: 'both', position: 'relative' }}>
-            <Box sx={{ position: 'absolute', inset: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', pt: '10px', px: 4, fontFamily: "'GochiHand', cursive", fontSize: '24px', color: '#00c7ff' }}>
+            <Box sx={{ position: 'absolute', inset: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', pt: '10px', px: 4, fontFamily: "'GochiHand', cursive", fontSize: '24px', color: '#66d9ff' }}>
               {!isFirstStep ? (
-                <button onClick={prev} className="walkthrough-nav-btn">&larr; Previous</button>
+                <button onClick={prev} className="walkthrough-nav-btn" aria-label="Previous step">&larr; Previous</button>
               ) : <div />}
               
               {!isLastStep ? (
-                <button onClick={next} className="walkthrough-nav-btn">Next &rarr;</button>
+                <button onClick={next} className="walkthrough-nav-btn" aria-label="Next step">Next &rarr;</button>
               ) : (
-                <button onClick={close} className="walkthrough-nav-btn">Finish &#10004;</button>
+                <button onClick={close} className="walkthrough-nav-btn" aria-label="Finish walkthrough">Finish &#10004;</button>
               )}
             </Box>
           </Box>

@@ -7,6 +7,7 @@
   src: url('/font/GochiHand-Regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 body {
@@ -45,4 +46,11 @@ body {
 }
 .walkthrough-nav-btn:hover {
   color: white;
+}
+
+.walkthrough-close-btn:focus-visible,
+.walkthrough-nav-btn:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 4px;
+  border-radius: 4px;
 }
