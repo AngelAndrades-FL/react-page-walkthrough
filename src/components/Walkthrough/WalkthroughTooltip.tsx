@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { useWalkthrough, StepInfo } from './WalkthroughContext';
 import { motion, TargetAndTransition } from 'framer-motion';
 import { Box } from '@mui/material';
@@ -9,6 +10,13 @@ interface WalkthroughTooltipProps {
 
 export const WalkthroughTooltip = ({ step, rect }: WalkthroughTooltipProps) => {
   const { next, prev, close, isFirstStep, isLastStep } = useWalkthrough();
+  const tooltipRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (tooltipRef.current) {
+      tooltipRef.current.focus();
+    }
+  }, [step.name]);
   
   const gap = 40; 
 
@@ -54,19 +62,25 @@ export const WalkthroughTooltip = ({ step, rect }: WalkthroughTooltipProps) => {
       </button>
 
       <motion.div
+        ref={tooltipRef}
+        tabIndex={-1}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="walkthrough-title"
+        aria-describedby="walkthrough-content"
         initial={false}
         animate={getPositionStyles()}
         transition={{ type: 'spring', bounce: 0, duration: 0.4 }}
-        style={{ position: 'absolute', width: '320px', pointerEvents: 'auto', zIndex: 100000 }}
+        style={{ position: 'absolute', width: '320px', pointerEvents: 'auto', zIndex: 100000, outline: 'none' }}
       >
         <Box sx={{ position: 'relative', p: '10px', overflow: 'visible' }}>
           <Box sx={{ position: 'absolute', top: '-35px', right: '-30px', width: '44px', height: '40px', backgroundImage: "url('/images/drag.png')", backgroundRepeat: 'no-repeat', zIndex: 10000 }} />
           
           {renderArrow()}
 
-          <Box sx={{ fontFamily: "'GochiHand', cursive", color: 'white', textAlign: 'center', fontSize: '22px' }} aria-live="polite">
-            {step.title && <Box sx={{ fontSize: '40px', mb: 1 }}>{step.title}</Box>}
-            {step.content}
+          <Box sx={{ fontFamily: "'GochiHand', cursive", color: 'white', textAlign: 'center', fontSize: '22px' }}>
+            {step.title && <Box id="walkthrough-title" sx={{ fontSize: '40px', mb: 1 }}>{step.title}</Box>}
+            <div id="walkthrough-content">{step.content}</div>
           </Box>
 
           <Box sx={{ backgroundImage: "url('/images/scratch-border.png')", backgroundRepeat: 'no-repeat', backgroundPosition: 'left top', width: '358px', height: '42px', mt: 2, ml: '-19px', clear: 'both', position: 'relative' }}>
