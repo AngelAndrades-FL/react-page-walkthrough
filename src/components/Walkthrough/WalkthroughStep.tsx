@@ -9,6 +9,7 @@ interface WalkthroughStepProps {
   position?: 'top' | 'bottom' | 'left' | 'right';
   children: ReactNode;
   className?: string;
+  onEnter?: () => void;
 }
 
 export const WalkthroughStep = ({
@@ -18,10 +19,18 @@ export const WalkthroughStep = ({
   content,
   position = 'top',
   children,
-  className = 'contents'
+  className = 'contents',
+  onEnter,
 }: WalkthroughStepProps) => {
   const { registerStep, unregisterStep, setTargetElement } = useWalkthrough();
   const elementRef = useRef<HTMLDivElement>(null);
+  const onEnterRef = useRef(onEnter);
+
+  // Keep ref in sync so the Provider always has the latest callback
+  // without needing it as a registerStep dependency.
+  useEffect(() => {
+    onEnterRef.current = onEnter;
+  }, [onEnter]);
 
   useEffect(() => {
     registerStep({
@@ -30,6 +39,9 @@ export const WalkthroughStep = ({
       title,
       content,
       position,
+      // Wrap in a stable ref-based function so re-renders of App don't
+      // cause registerStep to be called on every render.
+      onEnter: () => onEnterRef.current?.(),
     });
 
     return () => {

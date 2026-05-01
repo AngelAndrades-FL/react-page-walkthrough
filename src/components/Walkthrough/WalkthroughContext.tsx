@@ -7,6 +7,7 @@ export interface StepInfo {
   position?: 'top' | 'bottom' | 'left' | 'right';
   targetElement?: HTMLElement | null;
   order: number;
+  onEnter?: () => void;
 }
 
 export interface WalkthroughContextType {

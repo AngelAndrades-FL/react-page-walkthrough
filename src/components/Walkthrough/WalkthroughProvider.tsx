@@ -1,4 +1,4 @@
-import { useState, useCallback, ReactNode, useMemo } from 'react';
+import { useState, useCallback, useEffect, ReactNode, useMemo } from 'react';
 import { WalkthroughContext, StepInfo } from './WalkthroughContext';
 import { WalkthroughOverlay } from './WalkthroughOverlay';
 
@@ -50,6 +50,16 @@ export const WalkthroughProvider = ({ children }: { children: ReactNode }) => {
       setCurrentStepIndex((prev) => prev - 1);
     }
   }, [currentStepIndex]);
+
+  // Fire onEnter for the incoming step after each index commit.
+  useEffect(() => {
+    if (!isActive) return;
+    const step = sortedSteps[currentStepIndex];
+    step?.onEnter?.();
+    // sortedSteps is intentionally omitted from deps — we only want this
+    // to fire when the index actually changes, not on every re-registration.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isActive, currentStepIndex]);
 
   const isFirstStep = currentStepIndex === 0;
   const isLastStep = currentStepIndex === sortedSteps.length - 1;
